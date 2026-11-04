@@ -103,6 +103,13 @@ fun ProfileScreen(
 
         Spacer(Modifier.height(16.dp))
 
+        Button(
+            onClick = onNavigateToSettings,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("OPEN SETTINGS")
+        }
+
         // Settings
         ListItem(
             headlineContent = { Text("Settings") },
