@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">NewDawn</string>
+
+    <!-- Nav Bar -->
+    <string name="nav_home">Home</string>
+    <string name="nav_find_work">Find Work</string>
+    <string name="nav_post_job">Post Job</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_title">SETTINGS</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_save">SAVE SETTINGS</string>
+    <string name="settings_change_password">CHANGE PASSWORD</string>
+    <string name="settings_logout">LOGOUT</string>
+
+    <string name="home_hello">Hello, %1$s!</string>
+    <string name="home_prompt">What would you like to do today?</string>
+    <string name="home_find_work">FIND WORK</string>
+    <string name="home_post_job">POST A JOB</string>
+    <string name="home_recommended">Recommended Jobs</string>
 </resources>

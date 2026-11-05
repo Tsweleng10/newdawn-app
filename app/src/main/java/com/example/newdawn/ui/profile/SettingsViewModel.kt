@@ -4,6 +4,8 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import com.example.newdawn.data.remote.RetrofitInstance
 import com.example.newdawn.utils.TokenManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,14 +20,26 @@ data class SettingsUiState(
     val error: String? = null
 )
 
-class SettingsViewModel(app: Application) : AndroidViewModel(app) {
+class SettingsViewModel(app: Application) : AndroidViewModel(app)
+{
     private val TAG = "SettingsViewModel"
     private val tokenManager = TokenManager(app.applicationContext)
     private val _uiState = MutableStateFlow(SettingsUiState())
     val uiState: StateFlow<SettingsUiState> = _uiState
 
+    init {
+        // Read the current language when the screen opens
+        val currentLocales = AppCompatDelegate.getApplicationLocales()
+        if (!currentLocales.isEmpty) {
+            val currentLang = currentLocales.toLanguageTags()
+            _uiState.value = _uiState.value.copy(language = currentLang)
+        }
+    }
     fun setLanguage(lang: String) {
         _uiState.value = _uiState.value.copy(language = lang)
+        //change Language
+        val locales = LocaleListCompat.forLanguageTags(lang)
+        AppCompatDelegate.setApplicationLocales(locales)
     }
     fun setNotifications(enabled: Boolean) {
         _uiState.value = _uiState.value.copy(notificationsEnabled = enabled)

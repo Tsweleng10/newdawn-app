@@ -1,0 +1,19 @@
+<resources>
+    <string name="nav_home">Ikhaya</string>
+    <string name="nav_find_work">Thola Umsebenzi</string>
+    <string name="nav_post_job">Faka Umsebenzi</string>
+    <string name="nav_profile">Iphrofayela</string>
+    <string name="settings_title">IZILUNGISELELO</string>
+    <string name="settings_language">Ulimi</string>
+    <string name="settings_notifications">Izaziso</string>
+    <string name="settings_save">GCINA IZILUNGISELELO</string>
+    <string name="settings_change_password">SHINTSHA IPHASIWEDI</string>
+    <string name="settings_logout">PHUMA</string>
+
+    <!-- Home Screen translation -->
+    <string name="home_hello">Sawubona, %1$s!</string>
+    <string name="home_prompt">Yini ongathanda ukuyenza namuhla?</string>
+    <string name="home_find_work">THOLA UMSEBENZI</string>
+    <string name="home_post_job">FAKA UMSEBENZI</string>
+    <string name="home_recommended">Imisebenzi Encomekayo</string>
+</resources>
