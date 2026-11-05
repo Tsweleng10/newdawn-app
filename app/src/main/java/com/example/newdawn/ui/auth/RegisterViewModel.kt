@@ -10,6 +10,9 @@ import com.example.newdawn.utils.TokenManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 data class RegisterUiState(
     val isLoading: Boolean = false,
@@ -40,18 +43,22 @@ class RegisterViewModel(app: Application) : AndroidViewModel(app) {
             _uiState.value = RegisterUiState(error = "Passwords do not match")
             return
         }
+
         _uiState.value = RegisterUiState(isLoading = true)
+
         viewModelScope.launch {
             try {
                 Log.d(TAG, "Registering $email")
                 val response = RetrofitInstance.api.register(
                     RegisterRequest(fullName.trim(), email.trim(), password, location.trim())
                 )
+
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
                     tokenManager.saveToken(body.token, body.user.id, body.user.full_name)
                     tokenManager.saveUserEmail(body.user.email)
                     tokenManager.saveLocation(body.user.location ?: "")
+
                     Log.d(TAG, "Registration successful")
                     _uiState.value = RegisterUiState(isRegistered = true)
                 } else {
@@ -64,7 +71,13 @@ class RegisterViewModel(app: Application) : AndroidViewModel(app) {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Network error", e)
-                _uiState.value = RegisterUiState(error = "Network error: ${e.message}")
+                // Catch specific network errors and show a friendly message
+                val errorMsg = if (e is UnknownHostException || e is SocketTimeoutException || e is IOException) {
+                    "No internet connection. Please check your network."
+                } else {
+                    "An unexpected error occurred. Please try again."
+                }
+                _uiState.value = RegisterUiState(error = errorMsg)
             }
         }
     }

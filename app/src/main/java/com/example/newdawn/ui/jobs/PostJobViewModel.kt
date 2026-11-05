@@ -22,7 +22,7 @@ data class PostJobUiState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val isPosted: Boolean = false,
-    val isSavedOffline: Boolean = false // NEW: Tells UI it was saved offline
+    val isSavedOffline: Boolean = false
 )
 
 class PostJobViewModel(app: Application) : AndroidViewModel(app) {
@@ -57,7 +57,7 @@ class PostJobViewModel(app: Application) : AndroidViewModel(app) {
                     _uiState.value = PostJobUiState(error = "Server error (${res.code()})")
                 }
             } catch (e: Exception) {
-                // 🚨 NO INTERNET DETECTED: Save to Room Database
+                // 🚨 NO INTERNET DETECTED: Catch error and save offline
                 Log.e(TAG, "Network failed, saving offline", e)
                 saveOffline(title, category, description, location, budgetVal)
             }
@@ -79,7 +79,7 @@ class PostJobViewModel(app: Application) : AndroidViewModel(app) {
 
         // 2. Schedule WorkManager to sync when internet returns
         val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED) // Only run when internet is back
+            .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
         val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>()
@@ -88,7 +88,7 @@ class PostJobViewModel(app: Application) : AndroidViewModel(app) {
 
         WorkManager.getInstance(getApplication()).enqueue(syncRequest)
 
-        // 3. Tell the UI it saved offline
+        // 3. Tell the UI to show the Snackbar
         _uiState.value = PostJobUiState(isSavedOffline = true)
     }
 }

@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp) // <--- Use the alias we just added
+    alias(libs.plugins.ksp) // <--- Back to KSP, which your project already supports
 }
 
 android {
@@ -78,10 +78,10 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    // Room Database (Offline Storage)
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1") // <--- Changed to ksp
+    // Room Database (Offline Storage) - UPDATED TO 2.7.0 TO FIX THE BUG
+    implementation("androidx.room:room-runtime:2.7.0")
+    implementation("androidx.room:room-ktx:2.7.0")
+    ksp("androidx.room:room-compiler:2.7.0")
 
     // WorkManager (Background Sync)
     implementation("androidx.work:work-runtime-ktx:2.9.0")
