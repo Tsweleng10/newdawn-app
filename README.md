@@ -176,7 +176,7 @@ We used a strict **Feature Branch + Pull Request** workflow to ensure code quali
 
 ## Demo Video
 
-▶️ [Watch the full demonstration on YouTube](#) <!-- TODO: replace # with your YouTube link -->
+▶️ [Watch the full demonstration on YouTube](https://youtu.be/sS6t60LT4C4)
 
 The demonstration covers:
 
