@@ -1,3 +1,4 @@
+![NewDawn Banner](hero.png)
 # NewDawn - Township Informal Job Opportunity App
 
 ## Live API
