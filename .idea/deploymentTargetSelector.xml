@@ -4,6 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="NewDawn">
         <option name="selectionMode" value="DROPDOWN" />
+        <DialogSelection />
       </SelectionState>
     </selectionStates>
   </component>

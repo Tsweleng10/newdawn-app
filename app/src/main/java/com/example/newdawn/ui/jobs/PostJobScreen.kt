@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun PostJobScreen(
@@ -21,63 +22,86 @@ fun PostJobScreen(
     var location by remember { mutableStateOf("") }
     var budget by remember { mutableStateOf("") }
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val categories = listOf("Gardening","Cleaning","Plumbing","Electrical",
         "Painting","Moving","Childcare","Cooking","Other")
 
-    LaunchedEffect(state.isPosted) { if (state.isPosted) onJobPosted() }
+    // 1. If posted successfully online, navigate back
+    LaunchedEffect(state.isPosted) {
+        if (state.isPosted) onJobPosted()
+    }
 
-    Column(Modifier.fillMaxSize().padding(24.dp)
-        .verticalScroll(rememberScrollState())) {
-        Text("POST A JOB",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary)
-        Spacer(Modifier.height(24.dp))
-
-        OutlinedTextField(title, { title = it },
-            label = { Text("Job Title") },
-            modifier = Modifier.fillMaxWidth(), singleLine = true)
-        Spacer(Modifier.height(12.dp))
-
-        Text("Category", style = MaterialTheme.typography.labelMedium)
-        Spacer(Modifier.height(4.dp))
-        ScrollableTabRow(selectedTabIndex = categories.indexOf(category)) {
-            categories.forEach { cat ->
-                Tab(selected = category == cat,
-                    onClick = { category = cat },
-                    text = { Text(cat, style = MaterialTheme.typography.bodySmall) })
-            }
+    // 2. If saved offline, show a snackbar message, wait 2 seconds, then navigate back
+    LaunchedEffect(state.isSavedOffline) {
+        if (state.isSavedOffline) {
+            snackbarHostState.showSnackbar("No internet connection. Job saved locally and will sync automatically!")
+            delay(2000)
+            onJobPosted()
         }
-        Spacer(Modifier.height(12.dp))
+    }
 
-        OutlinedTextField(description, { description = it },
-            label = { Text("Description") },
-            modifier = Modifier.fillMaxWidth().height(120.dp))
-        Spacer(Modifier.height(12.dp))
-
-        OutlinedTextField(location, { location = it },
-            label = { Text("Location") },
-            modifier = Modifier.fillMaxWidth(), singleLine = true)
-        Spacer(Modifier.height(12.dp))
-
-        OutlinedTextField(budget, { budget = it },
-            label = { Text("Budget (R)") },
-            modifier = Modifier.fillMaxWidth(), singleLine = true)
-        Spacer(Modifier.height(16.dp))
-
-        state.error?.let {
-            Text(it, color = MaterialTheme.colorScheme.error)
-            Spacer(Modifier.height(8.dp))
-        }
-
-        Button(
-            onClick = { viewModel.post(title, category, description, location, budget) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !state.isLoading
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { padding ->
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(24.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            if (state.isLoading) CircularProgressIndicator(
-                Modifier.size(20.dp),
-                color = MaterialTheme.colorScheme.onPrimary)
-            else Text("POST JOB")
+            Text("POST A JOB",
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.primary)
+            Spacer(Modifier.height(24.dp))
+
+            OutlinedTextField(title, { title = it },
+                label = { Text("Job Title") },
+                modifier = Modifier.fillMaxWidth(), singleLine = true)
+            Spacer(Modifier.height(12.dp))
+
+            Text("Category", style = MaterialTheme.typography.labelMedium)
+            Spacer(Modifier.height(4.dp))
+            ScrollableTabRow(selectedTabIndex = categories.indexOf(category)) {
+                categories.forEach { cat ->
+                    Tab(selected = category == cat,
+                        onClick = { category = cat },
+                        text = { Text(cat, style = MaterialTheme.typography.bodySmall) })
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+
+            OutlinedTextField(description, { description = it },
+                label = { Text("Description") },
+                modifier = Modifier.fillMaxWidth().height(120.dp))
+            Spacer(Modifier.height(12.dp))
+
+            OutlinedTextField(location, { location = it },
+                label = { Text("Location") },
+                modifier = Modifier.fillMaxWidth(), singleLine = true)
+            Spacer(Modifier.height(12.dp))
+
+            OutlinedTextField(budget, { budget = it },
+                label = { Text("Budget (R)") },
+                modifier = Modifier.fillMaxWidth(), singleLine = true)
+            Spacer(Modifier.height(16.dp))
+
+            state.error?.let {
+                Text(it, color = MaterialTheme.colorScheme.error)
+                Spacer(Modifier.height(8.dp))
+            }
+
+            Button(
+                onClick = { viewModel.post(title, category, description, location, budget) },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !state.isLoading
+            ) {
+                if (state.isLoading) CircularProgressIndicator(
+                    Modifier.size(20.dp),
+                    color = MaterialTheme.colorScheme.onPrimary)
+                else Text("POST JOB")
+            }
         }
     }
 }

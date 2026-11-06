@@ -10,6 +10,9 @@ import com.example.newdawn.utils.TokenManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 data class LoginUiState(
     val isLoading: Boolean = false,
@@ -32,16 +35,20 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
             _uiState.value = LoginUiState(error = "Invalid email format")
             return
         }
+
         _uiState.value = LoginUiState(isLoading = true)
+
         viewModelScope.launch {
             try {
                 Log.d(TAG, "Attempting login for $email")
                 val response = RetrofitInstance.api.login(LoginRequest(email, password))
+
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
                     tokenManager.saveToken(body.token, body.user.id, body.user.full_name)
                     tokenManager.saveUserEmail(body.user.email)
                     tokenManager.saveLocation(body.user.location ?: "")
+
                     Log.d(TAG, "Login successful")
                     _uiState.value = LoginUiState(isLoggedIn = true)
                 } else {
@@ -54,7 +61,13 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Network error", e)
-                _uiState.value = LoginUiState(error = "Network error: ${e.message}")
+                // Catch specific network errors and show a friendly message
+                val errorMsg = if (e is UnknownHostException || e is SocketTimeoutException || e is IOException) {
+                    "No internet connection. Please check your network."
+                } else {
+                    "An unexpected error occurred. Please try again."
+                }
+                _uiState.value = LoginUiState(error = errorMsg)
             }
         }
     }
