@@ -7,9 +7,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.newdawn.R
 import com.example.newdawn.ui.navigation.Screen
 
 @Composable
@@ -20,7 +22,7 @@ fun FindWorkScreen(
     val state by viewModel.uiState.collectAsState()
 
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Text("FIND WORK",
+        Text(stringResource(R.string.nav_find_work),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary)
         Spacer(Modifier.height(12.dp))
@@ -28,7 +30,7 @@ fun FindWorkScreen(
         OutlinedTextField(
             value = state.searchQuery,
             onValueChange = viewModel::onSearchChange,
-            label = { Text("Search jobs") },
+            label = { Text(stringResource(R.string.search_jobs)) },
             modifier = Modifier.fillMaxWidth(), singleLine = true)
 
         Spacer(Modifier.height(12.dp))
@@ -41,11 +43,11 @@ fun FindWorkScreen(
             Column {
                 Text(state.error!!, color = MaterialTheme.colorScheme.error)
                 Spacer(Modifier.height(8.dp))
-                OutlinedButton(onClick = { viewModel.loadJobs() }) { Text("Retry") }
+                OutlinedButton(onClick = { viewModel.loadJobs() }) { Text(stringResource(R.string.retry)) }
             }
         } else if (state.jobs.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No jobs found. Try a different search.")
+                Text(stringResource(R.string.no_jobs_found))
             }
         } else {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {

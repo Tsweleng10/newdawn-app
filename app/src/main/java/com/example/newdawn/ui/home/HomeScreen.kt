@@ -9,14 +9,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.newdawn.R
 import com.example.newdawn.ui.jobs.JobCard
 import com.example.newdawn.ui.navigation.Screen
-import androidx.compose.ui.res.stringResource
-import com.example.newdawn.R
 
 @Composable
 fun HomeScreen(
@@ -32,10 +32,12 @@ fun HomeScreen(
     ) {
         Text(stringResource(R.string.home_hello, state.userName),
             style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold)
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground)
         Spacer(Modifier.height(4.dp))
         Text(stringResource(R.string.home_prompt),
-            style = MaterialTheme.typography.bodyMedium)
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground)
 
         Spacer(Modifier.height(24.dp))
         Button(
@@ -52,7 +54,8 @@ fun HomeScreen(
         Spacer(Modifier.height(32.dp))
         Text(stringResource(R.string.home_recommended),
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold)
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onBackground)
         Spacer(Modifier.height(12.dp))
 
         when {
@@ -63,11 +66,14 @@ fun HomeScreen(
             state.error != null -> Column {
                 Text(state.error!!, color = MaterialTheme.colorScheme.error)
                 Spacer(Modifier.height(8.dp))
-                OutlinedButton(onClick = { viewModel.loadHome() }) { Text("Retry") }
+                //  Added stringResource for Retry
+                OutlinedButton(onClick = { viewModel.loadHome() }) { Text(stringResource(R.string.retry)) }
             }
             state.recommendedJobs.isEmpty() -> Text(
-                "No jobs available yet. Be the first to post one!",
-                style = MaterialTheme.typography.bodyMedium)
+                //  Added stringResource for Empty State
+                stringResource(R.string.home_no_jobs),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground)
             else -> Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {

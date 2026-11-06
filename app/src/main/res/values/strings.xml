@@ -20,4 +20,9 @@
     <string name="home_find_work">FIND WORK</string>
     <string name="home_post_job">POST A JOB</string>
     <string name="home_recommended">Recommended Jobs</string>
+
+    <string name="retry">Retry</string>
+    <string name="search_jobs">Search jobs</string>
+    <string name="no_jobs_found">No jobs found. Try a different search.</string>
+    <string name="home_no_jobs">No jobs available yet. Be the first to post one!</string>
 </resources>

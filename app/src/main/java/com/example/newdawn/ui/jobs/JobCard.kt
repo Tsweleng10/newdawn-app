@@ -11,17 +11,21 @@ import com.example.newdawn.data.models.Job
 
 @Composable
 fun JobCard(job: Job, onClick: () -> Unit) {
+    // Card automatically uses surfaceVariant (CreamWhite in our new theme)
     Card(modifier = Modifier.fillMaxWidth().clickable { onClick() }) {
         Column(Modifier.padding(16.dp)) {
             Text(job.title,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold)
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface)
             Spacer(Modifier.height(4.dp))
             Text("${job.location} • R${job.budget}",
-                style = MaterialTheme.typography.bodyMedium)
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface)
             Spacer(Modifier.height(4.dp))
             Text("Posted by ${job.poster_name ?: "User"}",
-                style = MaterialTheme.typography.bodySmall)
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface)
             Spacer(Modifier.height(8.dp))
             Text("Status: ${job.status}",
                 color = MaterialTheme.colorScheme.primary,

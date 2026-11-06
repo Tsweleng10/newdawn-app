@@ -3,11 +3,8 @@ package com.example.newdawn
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
 import com.example.newdawn.ui.navigation.AppNavigation
+import com.example.newdawn.ui.theme.NewDawnBackground
 import com.example.newdawn.ui.theme.NewDawnTheme
 
 class MainActivity : AppCompatActivity() {
@@ -15,10 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NewDawnTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                NewDawnBackground {
                     AppNavigation()
                 }
             }
