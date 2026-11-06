@@ -13,6 +13,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.example.newdawn.R
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -55,10 +57,10 @@ fun AppNavigation() {
 
     // Define the 4 main tabs for the bottom bar
     val bottomNavItems = listOf(
-        BottomNavItem(Screen.Home.route, Icons.Filled.Home, "Home"),
-        BottomNavItem(Screen.FindWork.route, Icons.Filled.Search, "Find Work"),
-        BottomNavItem(Screen.PostJob.route, Icons.Filled.AddCircle, "Post Job"),
-        BottomNavItem(Screen.Profile.route, Icons.Filled.Person, "Profile")
+        BottomNavItem(Screen.Home.route, Icons.Filled.Home, stringResource(R.string.nav_home)),
+        BottomNavItem(Screen.FindWork.route, Icons.Filled.Search, stringResource(R.string.nav_find_work)),
+        BottomNavItem(Screen.PostJob.route, Icons.Filled.AddCircle, stringResource(R.string.nav_post_job)),
+        BottomNavItem(Screen.Profile.route, Icons.Filled.Person, stringResource(R.string.nav_profile))
     )
 
     // Only show bottom bar on these specific screens

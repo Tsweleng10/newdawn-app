@@ -1,0 +1,12 @@
+<resources>
+    <string name="nav_home">Tuis</string>
+    <string name="nav_find_work">Vind Werk</string>
+    <string name="nav_post_job">Plaas Werk</string>
+    <string name="nav_profile">Profiel</string>
+    <string name="settings_title">INSTELLINGS</string>
+    <string name="settings_language">Taal</string>
+    <string name="settings_notifications">Kennisgewings</string>
+    <string name="settings_save">STOOR INSTELLINGS</string>
+    <string name="settings_change_password">VERANDER WAGWOORD</string>
+    <string name="settings_logout">TEKEN UIT</string>
+</resources>

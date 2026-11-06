@@ -8,10 +8,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.newdawn.R
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun SettingsScreen(
@@ -21,7 +27,7 @@ fun SettingsScreen(
     val state by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     var showPasswordDialog by remember { mutableStateOf(false) }
-
+    val context = LocalContext.current
     LaunchedEffect(state.message) {
         state.message?.let { snackbarHostState.showSnackbar(it) }
     }
@@ -31,22 +37,40 @@ fun SettingsScreen(
 
     Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(24.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(24.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Text("SETTINGS",
+            // using stringResource
+            Text(
+                text = stringResource(R.string.settings_title),
                 style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.primary)
+                color = MaterialTheme.colorScheme.primary
+            )
             Spacer(Modifier.height(24.dp))
 
-            Text("Language", style = MaterialTheme.typography.titleSmall)
+            Text(stringResource(R.string.settings_language), style = MaterialTheme.typography.titleSmall)
             Spacer(Modifier.height(4.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf("en" to "English", "zu" to "isiZulu", "af" to "Afrikaans")
                     .forEach { (code, label) ->
                         FilterChip(
                             selected = state.language == code,
-                            onClick = { viewModel.setLanguage(code) },
+                            onClick = {
+                                viewModel.setLanguage(code)
+
+                                //THIS FORCES THE UI TO REFRESH
+                                var ctx = context
+                                while (ctx is ContextWrapper) {
+                                    if (ctx is Activity) {
+                                        ctx.recreate()
+                                        break
+                                    }
+                                    ctx = ctx.baseContext
+                                }
+                            },
                             label = { Text(label) }
                         )
                     }
@@ -54,7 +78,10 @@ fun SettingsScreen(
 
             Spacer(Modifier.height(24.dp))
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Text("Notifications", modifier = Modifier.weight(1f))
+                Text(
+                    text = stringResource(R.string.settings_notifications),
+                    modifier = Modifier.weight(1f)
+                )
                 Switch(
                     checked = state.notificationsEnabled,
                     onCheckedChange = { viewModel.setNotifications(it) }
@@ -66,13 +93,17 @@ fun SettingsScreen(
                 onClick = { viewModel.saveSettings() },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !state.isLoading
-            ) { Text("SAVE SETTINGS") }
+            ) {
+                Text(stringResource(R.string.settings_save))
+            }
 
             Spacer(Modifier.height(16.dp))
             OutlinedButton(
                 onClick = { showPasswordDialog = true },
                 modifier = Modifier.fillMaxWidth()
-            ) { Text("CHANGE PASSWORD") }
+            ) {
+                Text(stringResource(R.string.settings_change_password))
+            }
 
             Spacer(Modifier.height(24.dp))
             Button(
@@ -81,7 +112,9 @@ fun SettingsScreen(
                     containerColor = MaterialTheme.colorScheme.error
                 ),
                 modifier = Modifier.fillMaxWidth()
-            ) { Text("LOGOUT") }
+            ) {
+                Text(stringResource(R.string.settings_logout))
+            }
 
             if (state.isLoading) {
                 Spacer(Modifier.height(16.dp))
@@ -110,20 +143,26 @@ private fun ChangePasswordDialog(onDismiss: () -> Unit, onConfirm: (String, Stri
         title = { Text("Change Password") },
         text = {
             Column {
-                OutlinedTextField(oldPw, { oldPw = it },
+                OutlinedTextField(
+                    oldPw, { oldPw = it },
                     label = { Text("Old Password") },
                     visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password))
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                )
                 Spacer(Modifier.height(8.dp))
-                OutlinedTextField(newPw, { newPw = it },
+                OutlinedTextField(
+                    newPw, { newPw = it },
                     label = { Text("New Password") },
                     visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password))
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                )
             }
         },
         confirmButton = {
             TextButton(onClick = { onConfirm(oldPw, newPw) }) { Text("CONFIRM") }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("Cancel") }
+        }
     )
 }

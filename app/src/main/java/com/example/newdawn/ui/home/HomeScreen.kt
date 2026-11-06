@@ -15,6 +15,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.newdawn.ui.jobs.JobCard
 import com.example.newdawn.ui.navigation.Screen
+import androidx.compose.ui.res.stringResource
+import com.example.newdawn.R
 
 @Composable
 fun HomeScreen(
@@ -28,27 +30,27 @@ fun HomeScreen(
             .verticalScroll(rememberScrollState())
             .padding(24.dp)
     ) {
-        Text("Hello, ${state.userName}!",
+        Text(stringResource(R.string.home_hello, state.userName),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(4.dp))
-        Text("What would you like to do today?",
+        Text(stringResource(R.string.home_prompt),
             style = MaterialTheme.typography.bodyMedium)
 
         Spacer(Modifier.height(24.dp))
         Button(
             onClick = { navController.navigate(Screen.FindWork.route) },
             modifier = Modifier.fillMaxWidth().height(64.dp)
-        ) { Text("FIND WORK", style = MaterialTheme.typography.titleMedium) }
+        ) { Text(stringResource(R.string.home_find_work), style = MaterialTheme.typography.titleMedium) }
 
         Spacer(Modifier.height(12.dp))
         OutlinedButton(
             onClick = { navController.navigate(Screen.PostJob.route) },
             modifier = Modifier.fillMaxWidth().height(64.dp)
-        ) { Text("POST A JOB", style = MaterialTheme.typography.titleMedium) }
+        ) { Text(stringResource(R.string.home_post_job), style = MaterialTheme.typography.titleMedium) }
 
         Spacer(Modifier.height(32.dp))
-        Text("Recommended Jobs",
+        Text(stringResource(R.string.home_recommended),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold)
         Spacer(Modifier.height(12.dp))
